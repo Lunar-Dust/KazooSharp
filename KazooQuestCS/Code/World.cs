@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using System;
 using System.Linq;
-using KazooQuestCS.Code;
 
 namespace KazooQuestCS
 {

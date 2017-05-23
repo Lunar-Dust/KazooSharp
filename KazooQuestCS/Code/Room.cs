@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KazooQuestCS.Code
+namespace KazooQuestCS
 {
     class Room
     {
@@ -15,11 +15,15 @@ namespace KazooQuestCS.Code
         public bool Visible = true;
         Tile[,] Tiles;
 
+        public Enemy Enemy;
+
         private int _xtiles;
         private int _ytiles;
 
         public Room(Vector2 position)
         {
+            Random rnd = new Random(this.GetHashCode());
+            if(rnd.Next(5) == 1) Enemy = new Enemy();
             Position = position;
             _xtiles = Main.graphicsDevice.Viewport.Width / Main.tileSize;
             _ytiles = Main.graphicsDevice.Viewport.Height / Main.tileSize;
@@ -53,7 +57,8 @@ namespace KazooQuestCS.Code
                 }
                   else
                 {*/
-                    data[x] = Color.Black;
+                if (Enemy != null) data[x] = Color.Red;
+                else data[x] = Color.Black;
                 //}
             }
             Texture.SetData(data);

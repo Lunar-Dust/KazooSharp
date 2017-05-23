@@ -11,8 +11,9 @@ namespace KazooQuestCS
         public Texture2D Texture;
         public Rectangle Position;
         public string Name;
-        private bool active = false;
         public int Moves;
+        public Stats Stats;
+        private bool active = false;
         /// <summary>
         /// 0- Keys.A
         /// 1- Keys.D
@@ -20,9 +21,7 @@ namespace KazooQuestCS
         /// 3- Keys.S
         /// </summary>
         public bool[] LastMove = new bool[4];
-
         private bool[] _lastReset = new bool[4];
-        private IDictionary<string, int> stats;
 
         public int Height
         {
@@ -32,11 +31,6 @@ namespace KazooQuestCS
         public int Width
         {
             get { return Texture.Width; }
-        }
-
-        public IDictionary<string, int> Stats
-        {
-            get { return stats; }
         }
 
         public bool Active
@@ -60,14 +54,8 @@ namespace KazooQuestCS
 
         public void Create(string name, int _class)
         {
-            stats.Add("max_health", 100);
-            stats.Add("health", 100);
-            stats.Add("max_mana", 10);
-            stats.Add("mana", 10);
-            stats.Add("max_stamina", 10);
-            stats.Add("stamina", 10);
-            stats.Add("attack", 1);
-            stats.Add("defense", 0);
+            Stats = new Stats();
+            Stats.Set(1, 100, 10, 10, 1, 0, 0);
         }
 
         public void Update(GameTime gameTime)

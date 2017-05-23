@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using System.Collections.Generic;
 using System.IO;
+using System.Xml;
 
 namespace KazooQuestCS
 {
@@ -24,6 +25,7 @@ namespace KazooQuestCS
         public static List<Menu> menus;
         public static Player player;
         public static GraphicsDevice graphicsDevice;
+        public static XmlDocument Enemies;
 
         public static KeyboardState currKeyboard;
         public static KeyboardState prevKeyboard;
@@ -65,7 +67,11 @@ namespace KazooQuestCS
         protected override void Initialize()
         {
             graphicsDevice = GraphicsDevice;
+
+            Enemies = new XmlDocument();
+            Enemies.Load("Data/Enemies.xml");
             player = new Player();
+            player.Create("AAAAA", 0);
             menu = new Menu();
             Rectangle menuRect = new Rectangle(200, 100, 200, 300);
             Texture2D menuTexture = new Texture2D(GraphicsDevice, 200, 300);
@@ -97,6 +103,7 @@ namespace KazooQuestCS
 
             SpriteFont font = Content.Load<SpriteFont>("Graphics/Arial");
             menu.SetFont(font);
+            //System.Diagnostics.Debug.Write(Enemies.InnerXml);
         }
 
         /// <summary>
