@@ -18,8 +18,6 @@ namespace KazooQuestCS.Code
         private int _xtiles;
         private int _ytiles;
 
-        public int[] exits = new int[4];
-
         public Room(Vector2 position)
         {
             Position = position;
@@ -27,21 +25,13 @@ namespace KazooQuestCS.Code
             _ytiles = Main.graphicsDevice.Viewport.Height / Main.tileSize;
             Tiles = new Tile[_xtiles, _ytiles];
 
-            Random rnd = new Random();
-            int shape = rnd.Next(1, 15);
-            string str = Convert.ToString(shape, 2);
-            int[] bits = str.PadLeft(4, '0')
-                .Select(c => int.Parse(c.ToString()))
-                .ToArray();
-            exits = bits;
-
             Color[] data = new Color[Texture.Width * Texture.Height];
             Texture.GetData(data);
 
             // This is ungodly ugly
             for (int x = 0; x < data.Length; ++x)
             {
-                if (x < Texture.Width * 2)
+                /*if (x < Texture.Width * 2)
                 {
                     if (exits[2] == 1) data[x] = Color.Yellow;
                     else data[x] = Color.Black;
@@ -62,15 +52,11 @@ namespace KazooQuestCS.Code
                     else data[x] = Color.Black;
                 }
                   else
-                {
+                {*/
                     data[x] = Color.Black;
-                }
+                //}
             }
             Texture.SetData(data);
-        }
-
-        public void Check()
-        {
         }
 
         public void Draw(SpriteBatch spriteBatch)

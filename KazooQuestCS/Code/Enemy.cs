@@ -10,5 +10,9 @@ namespace KazooQuestCS
     {
         Texture2D Texture;
         Vector2 Position;
+        public Enemy()
+        {
+
+        }
     }
 }

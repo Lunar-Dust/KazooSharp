@@ -34,7 +34,6 @@ namespace KazooQuestCS
         public void Initialize()
         {
             Rooms[roomStart, roomStart] = new Room(new Vector2(roomStart * Main.tileSize));
-            Rooms[roomStart, roomStart].exits = new int[4] { 1, 1, 1, 1 };
             while (roomCount < roomWant)
             {
                 for(int x=0; x < mapRooms; ++x)
@@ -44,29 +43,12 @@ namespace KazooQuestCS
                     {
                         Random rand = new Random(rnd.Next(256));
                         // Left, Right, Up, Down
-                        int val = NearRoom(x, y);
-                        if (val != -1)
+                        List<int> val = NearRoom(x, y);
+                        if (!val.Contains(-1))
                         {
-                            if (rand.Next(3) != 1) continue;
+                            if (rand.Next(5) != 1) continue;
                             if (Rooms[x, y] != null) continue;
                             Rooms[x, y] = new Room(new Vector2(x * Main.tileSize, y * Main.tileSize));
-                            if (val == 1)
-                            {
-                                Rooms[x, y].exits[0] = 1;
-                            }
-                            if (val == 2)
-                            {
-                                Rooms[x, y].exits[1] = 1;
-                            }
-                            if (val == 3)
-                            {
-                                Rooms[x, y].exits[2] = 1;
-                            }
-                            if (val == 4)
-                            {
-                                Rooms[x, y].exits[3] = 1;
-                            }
-                            Rooms[x, y].Check();
                             roomCount++;
                         }
                     }
@@ -74,35 +56,23 @@ namespace KazooQuestCS
             }
         }
 
-        private int NearRoom(int x, int y)
+        private List<int> NearRoom(int x, int y)
         {
-            if (x == 0) return -1;
+            List<int> returns = new List<int>();
 
-            if (Rooms[x - 1, y] != null)
-            {
-                if(Rooms[x - 1, y].exits[1] == 1) return 1;
-            }
+            if (x == 0 || y == 0) return new List<int>() { -1 };
+            if (x == mapRooms - 1 || y == mapRooms - 1) return new List<int>() { -1 };
 
-            if (x == mapRooms - 1) return -1;
-            if (Rooms[x + 1, y] != null)
-            {
-                if (Rooms[x + 1, y].exits[0] == 1) return 2;
-            }
+            if (Rooms[x - 1, y] != null) returns.Add(1);
 
-            if (y == 0) return -1;
+            if (Rooms[x + 1, y] != null) returns.Add(2);
 
-            if (Rooms[x, y - 1] != null)
-            {
-                if (Rooms[x, y - 1].exits[2] == 1) return 3;
-            }
+            if (Rooms[x, y - 1] != null) returns.Add(3);
 
-            if (y == mapRooms - 1) return -1;
-            if (Rooms[x, y + 1] != null)
-            {
-                if (Rooms[x, y + 1].exits[3] == 1) return 4;
-            }
+            if (Rooms[x, y + 1] != null) returns.Add(4);
 
-            return -1;
+            if(returns.Count == 0) return new List<int>() { -1 };
+            else return returns;
         }
 
         public void Update(GameTime gameTime)
@@ -112,21 +82,17 @@ namespace KazooQuestCS
             x = MathHelper.Clamp(x, 0, roomWant - 1);
             y = MathHelper.Clamp(y, 0, roomWant - 1);
             if (Main.player.LastMove[0])
-            {
                 if(Rooms[x, y] == null) x++;
-            }
+
             if (Main.player.LastMove[1])
-            {
                 if (Rooms[x, y] == null) x--;
-            }
+
             if (Main.player.LastMove[2])
-            {
                 if (Rooms[x, y] == null) y++;
-            }
+
             if (Main.player.LastMove[3])
-            {
                 if (Rooms[x, y] == null) y--;
-            }
+
             Main.player.Position.X = (x * Main.tileSize) + (int)(Main.tileSize * 0.25);
             Main.player.Position.Y = (y * Main.tileSize) + (int)(Main.tileSize * 0.25);
         }
@@ -139,7 +105,7 @@ namespace KazooQuestCS
                 for (int y = 0; y < mapRooms; ++y)
                 {
                     if (Rooms[x, y] == null) continue;
-                    Rooms[x, y].Draw(spriteBatch);
+                        Rooms[x, y].Draw(spriteBatch);
                 }
             }
         }

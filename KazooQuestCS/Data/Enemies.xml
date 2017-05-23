@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Enemies>
+  <Enemy>
+    <name>Slime</name>
+    <level>1</level>
+    <hp>10</hp>
+    <str>1</str>
+    <def>1</def>
+    <res>1</res>
+    <element>none</element>
+    <info>Boing!</info>
+  </Enemy>
+  <Enemy>
+    <name>Wolf</name>
+    <level>2</level>
+    <hp>10</hp>
+    <str>2</str>
+    <def>2</def>
+    <res>1</res>
+    <element>none</element>
+    <info>Would eat you in one bite</info>
+  </Enemy>
+</Enemies> 

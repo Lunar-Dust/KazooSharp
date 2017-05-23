@@ -14,7 +14,7 @@ namespace KazooQuestCS
         SpriteFont Font;
         Rectangle Position;
         bool Active;
-        bool Visible = true;
+        public bool Visible = true;
         short Selected = 0;
 
         private Vector2 _base;
@@ -59,13 +59,13 @@ namespace KazooQuestCS
 
         public void Update(GameTime gameTime)
         {
-            if (Main.currKeyboard.IsKeyDown(Keys.W) && !Main.prevKeyboard.IsKeyDown(Keys.W))
+            if (Main.KeyPush(Keys.W))
                 Selected -= 1;
 
-            if (Main.currKeyboard.IsKeyDown(Keys.S) && !Main.prevKeyboard.IsKeyDown(Keys.S))
+            if (Main.KeyPush(Keys.S))
                 Selected += 1;
 
-            if (Main.currKeyboard.IsKeyDown(Keys.Enter) && !Main.prevKeyboard.IsKeyDown(Keys.Enter))
+            if (Main.KeyPush(Keys.Enter))
                 Items[Selected].Call();
 
             Selected = (short)MathHelper.Clamp(Selected, 0, Items.Count - 1);
@@ -83,11 +83,6 @@ namespace KazooQuestCS
             _pos.X -= Main.graphicsDevice.Viewport.Width / 8;
             _pos.Y += ((Background.Height / 10) * Selected);
             spriteBatch.DrawString(Font, ">>", _pos, Color.DarkGreen);
-        }
-
-        public void ToggleVisibility()
-        {
-            Visible = !Visible;
         }
     }
 }

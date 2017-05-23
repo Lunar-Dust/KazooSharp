@@ -44,7 +44,6 @@
   <ItemGroup>
     <Compile Include="Code\Enemy.cs" />
     <Compile Include="Code\Room.cs" />
-    <Compile Include="Code\WorldData.cs" />
     <Compile Include="GUI\Button.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="GUI\Menu.cs" />
@@ -116,6 +115,9 @@
   <ItemGroup>
     <Content Include="Content\Graphics\player.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Enemies.xml">
+      <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
