@@ -35,31 +35,8 @@ namespace KazooQuestCS
             // This is ungodly ugly
             for (int x = 0; x < data.Length; ++x)
             {
-                /*if (x < Texture.Width * 2)
-                {
-                    if (exits[2] == 1) data[x] = Color.Yellow;
-                    else data[x] = Color.Black;
-                }
-                else if (x % Texture.Width == 0 || x % Texture.Width == Texture.Width - 1)
-                {
-                    if (exits[1] == 1) data[x] = Color.Blue;
-                    else data[x] = Color.Black;
-                }
-                else if (x % Texture.Width == 1 || x % Texture.Width == 2)
-                {
-                    if (exits[0] == 1) data[x] = Color.Purple;
-                    else data[x] = Color.Black;
-                }
-                else if (x > Texture.Width * (Texture.Height - 2))
-                {
-                    if (exits[3] == 1) data[x] = Color.Red;
-                    else data[x] = Color.Black;
-                }
-                  else
-                {*/
                 if (Enemy != null) data[x] = Color.Red;
                 else data[x] = Color.Black;
-                //}
             }
             Texture.SetData(data);
         }
