@@ -22,7 +22,7 @@ namespace KazooQuestCS
 
         public Room(Vector2 position)
         {
-            Random rnd = new Random(this.GetHashCode());
+            Random rnd = new Random(GetHashCode());
             if(rnd.Next(5) == 1) Enemy = new Enemy();
             Position = position;
             _xtiles = Main.graphicsDevice.Viewport.Width / Main.tileSize;

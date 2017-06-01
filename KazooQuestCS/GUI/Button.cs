@@ -19,7 +19,7 @@ namespace KazooQuestCS.GUI
         public Vector2 Position;
         public string Name;
         public string Text;
-        protected int Type;
+        public int Type { get; }
         protected Action _Call = null;
 
         public Button(string name, int type, string text = "")
@@ -43,7 +43,8 @@ namespace KazooQuestCS.GUI
         public void Update() { }
         public void Draw(SpriteBatch spriteBatch, SpriteFont font)
         {
-            spriteBatch.DrawString(font, Text, Position, Color.Black);
+            if(Main.Fonts != null)
+                spriteBatch.DrawString(Main.Fonts["Arial"], Text, Position, Color.Black);
         }
     }
 }

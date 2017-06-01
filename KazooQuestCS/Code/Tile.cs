@@ -1,53 +1,28 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace KazooQuestCS
 {
-    class Tile
+    public class Tile
     {
-        public Texture2D Texture = new Texture2D(Main.graphicsDevice, Main.tileSize, Main.tileSize);
-        public Vector2 Position;
-        public Color _Color;
+        public bool IsPassable { get; set; }
 
-        public Tile(Vector2 position)
+        public Rectangle CollisionBox;
+        public Vector2 TilePosition;
+        private Texture2D Texture;
+
+        public Tile(Vector2 tilePosition, Texture2D texture = null)
         {
-            Position = position;
-            SetColor();
-        }
-
-        public void SetColor(Tuple<int, int, int> color = null)
-        {
-            Color[] data = new Color[Texture.Width * Texture.Height];
-
-            if (color == null)
-            {
-                Random rnd;
-                rnd = new Random(this.GetHashCode() + Main.player.Moves);
-                Texture.GetData(data);
-                int r, g, b;
-                r = rnd.Next(0, 256);
-                g = rnd.Next(0, 256);
-                b = rnd.Next(0, 256);
-                _Color = new Color(r, g, b);
-            }
-            else
-            {
-                _Color = new Color(color.Item1, color.Item2, color.Item3);
-                Texture.GetData(data);
-            }
-            for (int x = 0; x < data.Length; ++x)
-            {
-                data[x] = _Color;
-            }
-            Texture.SetData(data);
-        }
-
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            spriteBatch.Draw(Texture, Position, _Color);
+            TilePosition = tilePosition;
+            Texture = texture;
+            CollisionBox = new Rectangle((int)TilePosition.X * Main.tileSize,
+                                         (int)TilePosition.Y * Main.tileSize,
+                                         Main.tileSize, Main.tileSize);
         }
     }
 }

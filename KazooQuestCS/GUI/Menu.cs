@@ -13,8 +13,7 @@ namespace KazooQuestCS
         Texture2D Background;
         SpriteFont Font;
         Rectangle Position;
-        bool Active;
-        public bool Visible = true;
+        public bool Active;
         short Selected = 0;
 
         private Vector2 _base;
@@ -25,7 +24,6 @@ namespace KazooQuestCS
         public void Dispose()
         {
             Active = false;
-            Visible = false;
             Items.Clear();
             //_Submenus.Clear();
             if(Background != null) Background.Dispose();
@@ -36,15 +34,17 @@ namespace KazooQuestCS
             if(Font == null) Font = font;
         }
 
-        public void Initialize(Texture2D background,
-            string title,
-            Rectangle position)
+        public Menu(string title,
+                    Rectangle position,
+                    Texture2D background = null,
+                    bool active = false)
         {
             _base.X = position.Left;
             _base.Y = position.Top;
-            Background = background;
+            if (background == null) Background = new Texture2D(Main.graphicsDevice, position.Width, position.Height);
+            else Background = background;
             Title = title;
-            Active = true;
+            Active = active;
         }
 
         public void Add(string name, Action action, int type = 0, string text = "")
@@ -59,6 +59,7 @@ namespace KazooQuestCS
 
         public void Update(GameTime gameTime)
         {
+            if (!Active) return;
             if (Main.KeyPush(Keys.W))
                 Selected -= 1;
 
@@ -66,14 +67,18 @@ namespace KazooQuestCS
                 Selected += 1;
 
             if (Main.KeyPush(Keys.Enter))
+            {
                 Items[Selected].Call();
+                if (Items[Selected].Type != 1)
+                    Active = false;
+            }
 
             Selected = (short)MathHelper.Clamp(Selected, 0, Items.Count - 1);
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            if (!Visible) return;
+            if (!Active) return;
             spriteBatch.Draw(Background, Position, Color.White);
             _pos = _base;
             for (int i = 0; i < Items.Count; i++)
@@ -82,7 +87,7 @@ namespace KazooQuestCS
             }
             _pos.X -= Main.graphicsDevice.Viewport.Width / 8;
             _pos.Y += ((Background.Height / 10) * Selected);
-            spriteBatch.DrawString(Font, ">>", _pos, Color.DarkGreen);
+            spriteBatch.DrawString(Main.Fonts["Arial"], ">>", _pos, Color.DarkGreen);
         }
     }
 }

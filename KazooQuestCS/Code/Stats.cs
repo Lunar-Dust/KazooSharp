@@ -10,16 +10,18 @@ namespace KazooQuestCS
     public class Stats
     {
         private int level = -1;
-        private int hp = 100;
-        private int maxHP = 100;
-        private int mp = 10;
-        private int maxMP = 10;
-        private int stamina = 10;
-        private int maxStamina = 10;
-        private int str = 1;
-        private int def = 0;
-        private int res = 0;
-        private int spd = 5;
+        private int hp;
+        private int maxHP;
+        private int mp;
+        private int maxMP;
+        private int stamina;
+        private int maxStamina;
+        private int str;
+        private int def;
+        private int res;
+        private int spd;
+
+        private bool statsSet = false;
 
         public Stats()
         {
@@ -29,7 +31,7 @@ namespace KazooQuestCS
         public void Set(int _level, int _maxHP, int _maxMP,
             int _maxStamina, int _str, int _def, int _res)
         {
-            if (level != -1) return;
+            if (statsSet) return;
             level = _level;
             maxHP = _maxHP;
             maxMP = _maxMP;
@@ -37,6 +39,7 @@ namespace KazooQuestCS
             str = _str;
             def = _def;
             res = _res;
+            statsSet = true;
         }
 
         public void FromXml(XmlNode node)

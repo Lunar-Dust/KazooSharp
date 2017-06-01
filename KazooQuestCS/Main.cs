@@ -16,14 +16,15 @@ namespace KazooQuestCS
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Menu menu;
-        World world;
 
-        public const int tileSize = 50;
+        public const int tileSize = 5;
         public const int windowSize = 550;
+
+        public static Dictionary<string, SpriteFont> Fonts;
 
         public static List<Menu> menus;
         public static Player player;
+        public static World world;
         public static GraphicsDevice graphicsDevice;
         public static XmlDocument Enemies;
 
@@ -42,6 +43,11 @@ namespace KazooQuestCS
             }
         }
 
+        public static bool KeyDown(Keys key)
+        {
+            return currKeyboard.IsKeyDown(key);
+        }
+
         public Main()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -49,13 +55,14 @@ namespace KazooQuestCS
             graphics.PreferredBackBufferHeight = windowSize;
             graphics.ApplyChanges();
             Content.RootDirectory = "Content";
+            Fonts = new Dictionary<string, SpriteFont>();
+            Enemies = new XmlDocument();
+            menus = new List<Menu>();
         }
 
         public void Start()
         {
             player.Active = true;
-            world.Active = true;
-            menu.Dispose();
         }
 
         /// <summary>
@@ -67,20 +74,12 @@ namespace KazooQuestCS
         protected override void Initialize()
         {
             graphicsDevice = GraphicsDevice;
-
-            Enemies = new XmlDocument();
             Enemies.Load("Data/Enemies.xml");
-            player = new Player();
-            player.Create("AAAAA", 0);
-            menu = new Menu();
-            Rectangle menuRect = new Rectangle(200, 100, 200, 300);
-            Texture2D menuTexture = new Texture2D(GraphicsDevice, 200, 300);
-            menu.Initialize(menuTexture, "Main Menu", menuRect);
-            menu.Add("Test", Start);
-            menu.Add("Another test", Start);
+            Rectangle menuRect = new Rectangle(100, 100, windowSize - 100, windowSize - 100);
+            menus.Add(new Menu("Test menu", menuRect));
+            menus[0].Add("Start Game", Start);
+            menus[0].Active = true;
 
-            world = new World();
-            world.Initialize();
             base.Initialize();
         }
 
@@ -93,17 +92,13 @@ namespace KazooQuestCS
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            Rectangle playerRect = new Rectangle((GraphicsDevice.Viewport.Width / 2),
-                (GraphicsDevice.Viewport.Height / 2),
-                (int)(tileSize * 0.5), (int)(tileSize * 0.5));
 
             FileStream fileStream = new FileStream("Content/Graphics/player.png", FileMode.Open);
-            player.Initialize(Texture2D.FromStream(GraphicsDevice, fileStream), playerRect);
+            player = new Player(Texture2D.FromStream(GraphicsDevice, fileStream));
             fileStream.Dispose();
 
             SpriteFont font = Content.Load<SpriteFont>("Graphics/Arial");
-            menu.SetFont(font);
-            //System.Diagnostics.Debug.Write(Enemies.InnerXml);
+            Fonts.Add("Arial", font);
         }
 
         /// <summary>
@@ -122,15 +117,15 @@ namespace KazooQuestCS
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             prevKeyboard = currKeyboard;
             currKeyboard = Keyboard.GetState();
-
-            // TODO: Add your update logic here
             player.Update(gameTime);
-            menu.Update(gameTime);
-            world.Update(gameTime);
+            foreach (Menu menu in menus)
+            {
+                menu.Update(gameTime);
+            }
             base.Update(gameTime);
         }
 
@@ -141,13 +136,12 @@ namespace KazooQuestCS
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.White);
-            spriteBatch.Begin();
-            world.Draw(spriteBatch);
+            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
             player.Draw(spriteBatch);
-            menu.Draw(spriteBatch);
+            foreach (Menu menu in menus) {
+                menu.Draw(spriteBatch);
+            }
             spriteBatch.End();
-
-            // TODO: Add your drawing code here
 
             base.Draw(gameTime);
         }
