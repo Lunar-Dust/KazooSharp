@@ -13,19 +13,18 @@ namespace KazooQuestCS
         Texture2D Background;
         SpriteFont Font;
         Rectangle Position;
-        public bool Active;
-        short Selected = 0;
+        public bool Active { get; set; }
+        public short Selected = 0;
 
         private Vector2 _base;
         private Vector2 _pos;
 
-        List<Button> Items = new List<Button>();
+        public List<Button> Items = new List<Button>();
          
         public void Dispose()
         {
             Active = false;
             Items.Clear();
-            //_Submenus.Clear();
             if(Background != null) Background.Dispose();
         }
 
@@ -60,19 +59,6 @@ namespace KazooQuestCS
         public void Update(GameTime gameTime)
         {
             if (!Active) return;
-            if (Main.KeyPush(Keys.W))
-                Selected -= 1;
-
-            if (Main.KeyPush(Keys.S))
-                Selected += 1;
-
-            if (Main.KeyPush(Keys.Enter))
-            {
-                Items[Selected].Call();
-                if (Items[Selected].Type != 1)
-                    Active = false;
-            }
-
             Selected = (short)MathHelper.Clamp(Selected, 0, Items.Count - 1);
         }
 

@@ -45,6 +45,7 @@
     <Compile Include="Code\Camera.cs" />
     <Compile Include="Code\DelayedAction.cs" />
     <Compile Include="Code\Enemy.cs" />
+    <Compile Include="Code\InputManager.cs" />
     <Compile Include="Code\Stats.cs" />
     <Compile Include="Code\Tile.cs" />
     <Compile Include="GUI\Button.cs" />
@@ -64,6 +65,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -120,9 +122,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Graphics\player.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Data\Enemies.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

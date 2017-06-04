@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
@@ -16,9 +17,13 @@ namespace KazooQuestCS
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        InputManager inputManager;
+        Camera camera;
 
-        public const int tileSize = 5;
-        public const int windowSize = 550;
+        public const int tileSize = 32;
+        public const int windowSize = 480;
+        public const int maxVisibleTiles = windowSize / tileSize;
+        public const int totalMapSize = maxVisibleTiles * 15;
 
         public static Dictionary<string, SpriteFont> Fonts;
 
@@ -27,6 +32,9 @@ namespace KazooQuestCS
         public static World world;
         public static GraphicsDevice graphicsDevice;
         public static XmlDocument Enemies;
+        public static Dictionary<string, Texture2D> TextureStore;
+
+        public static Random random = new Random(Guid.NewGuid().GetHashCode());
 
         public static KeyboardState currKeyboard;
         public static KeyboardState prevKeyboard;
@@ -55,14 +63,12 @@ namespace KazooQuestCS
             graphics.PreferredBackBufferHeight = windowSize;
             graphics.ApplyChanges();
             Content.RootDirectory = "Content";
-            Fonts = new Dictionary<string, SpriteFont>();
-            Enemies = new XmlDocument();
-            menus = new List<Menu>();
         }
 
         public void Start()
         {
             player.Active = true;
+            world.Active = true;
         }
 
         /// <summary>
@@ -74,11 +80,19 @@ namespace KazooQuestCS
         protected override void Initialize()
         {
             graphicsDevice = GraphicsDevice;
-            Enemies.Load("Data/Enemies.xml");
+
+            Fonts = new Dictionary<string, SpriteFont>();
+            Enemies = new XmlDocument();
+            menus = new List<Menu>();
+            TextureStore = new Dictionary<string, Texture2D>();
             Rectangle menuRect = new Rectangle(100, 100, windowSize - 100, windowSize - 100);
+
             menus.Add(new Menu("Test menu", menuRect));
             menus[0].Add("Start Game", Start);
             menus[0].Active = true;
+
+            inputManager = new InputManager();
+            camera = new Camera(graphicsDevice.Viewport);
 
             base.Initialize();
         }
@@ -92,10 +106,19 @@ namespace KazooQuestCS
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            Enemies.Load("Data/Enemies.xml");
 
-            FileStream fileStream = new FileStream("Content/Graphics/player.png", FileMode.Open);
-            player = new Player(Texture2D.FromStream(GraphicsDevice, fileStream));
-            fileStream.Dispose();
+            List<string> graphicsFiles = new List<string>() { "player", "Tiles/Grass1", "Tiles/Rock1" };
+
+            foreach (string file in graphicsFiles)
+            {
+                Texture2D texture = Content.Load<Texture2D>(string.Format("Graphics/{0}", file));
+                TextureStore.Add(file, texture);
+            }
+
+            player = new Player(TextureStore["player"]);
+            world = new World();
+            world.Initialize();
 
             SpriteFont font = Content.Load<SpriteFont>("Graphics/Arial");
             Fonts.Add("Arial", font);
@@ -108,6 +131,7 @@ namespace KazooQuestCS
         protected override void UnloadContent()
         {
             // TODO: Unload any non ContentManager content here
+            Content.Unload();
         }
 
         /// <summary>
@@ -121,11 +145,13 @@ namespace KazooQuestCS
                 Exit();
             prevKeyboard = currKeyboard;
             currKeyboard = Keyboard.GetState();
-            player.Update(gameTime);
+            inputManager.Update(gameTime);
             foreach (Menu menu in menus)
             {
                 menu.Update(gameTime);
             }
+            player.Update(gameTime);
+            world.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -136,11 +162,14 @@ namespace KazooQuestCS
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.White);
-            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend,
+                              null, null, null, null, camera.TransformMatrix);
+            world.Draw(spriteBatch);
             player.Draw(spriteBatch);
             foreach (Menu menu in menus) {
                 menu.Draw(spriteBatch);
             }
+            //spriteBatch.Draw(TextureStore["Tiles/Grass1"], new Rectangle(0, 0, tileSize, tileSize), Color.Green);
             spriteBatch.End();
 
             base.Draw(gameTime);

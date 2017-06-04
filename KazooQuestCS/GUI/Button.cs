@@ -14,7 +14,7 @@ namespace KazooQuestCS.GUI
         back     // Goes back from a submenu
     }
 
-    class Button
+    public class Button
     {
         public Vector2 Position;
         public string Name;

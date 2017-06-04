@@ -10,7 +10,13 @@ namespace KazooQuestCS
 {
     public class Camera
     {
-        public Vector2 Location { get; set; }
+        public Point Location
+        {
+            get
+            {
+                return Main.player.CollisionBox.Center;
+            }
+        }
 
         private Rectangle Bounds { get; set; }
 

@@ -8,59 +8,45 @@ namespace KazooQuestCS
 {
     public class Player
     {
-        public Texture2D Texture;
+        private Stats stats;
+
+        public Stats Stats { get { return stats;  } }
+        public Texture2D Texture { get; }
         public Rectangle CollisionBox;
-        public Vector2 TilePosition;
-        public string Name;
-        public int Moves;
-        public Stats Stats;
-        private bool active = false;
-
-        public int Height
-        {
-            get { return Texture.Height; }
-        }
-
-        public int Width
-        {
-            get { return Texture.Width; }
-        }
-
-        public bool Active
-        {
-            get
-            {
-                return active;
-            }
-
-            set
-            {
-                active = value;
-            }
-        }
+        public Rectangle OldCollisionBox;
+        public Vector2 TilePosition { get; }
+        public string Name { get; }
+        public int Height { get { return Texture.Height; }}
+        public int Width { get {return Texture.Width; }}
+        public bool Active { get; set; }
 
         public Player(Texture2D texture)
         {
             Texture = texture;
             TilePosition = new Vector2(0, 0);
-            CollisionBox = new Rectangle(0, 0, Main.tileSize / 2, Main.tileSize / 2);
+            CollisionBox = new Rectangle((Main.windowSize - Main.tileSize) / 2,
+                                         (Main.windowSize - Main.tileSize) / 2,
+                                          Main.tileSize, Main.tileSize);
+            OldCollisionBox = CollisionBox;
         }
 
         public void Create(string name, int _class)
         {
-            Stats = new Stats();
-            Stats.Set(1, 100, 10, 10, 1, 0, 0);
+            stats = new Stats();
+            stats.Set(1, 100, 10, 10, 1, 0, 0);
         }
 
         public void Update(GameTime gameTime)
         {
-            if (!active) return;
+            if (!Active) return;
+            CollisionBox.X = MathHelper.Clamp(CollisionBox.X, 0, (Main.totalMapSize - 1) * Main.tileSize);
+            CollisionBox.Y = MathHelper.Clamp(CollisionBox.Y, 0, (Main.totalMapSize - 1) * Main.tileSize);
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
             if (!Active) return;
-            spriteBatch.Draw(Texture, CollisionBox, null, Color.White);
+            spriteBatch.Draw(Main.TextureStore["player"], CollisionBox, Color.White);
         }
 
         private void CheckValidTile()

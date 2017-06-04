@@ -14,15 +14,40 @@ namespace KazooQuestCS
 
         public Rectangle CollisionBox;
         public Vector2 TilePosition;
-        private Texture2D Texture;
+        private string Texture;
 
-        public Tile(Vector2 tilePosition, Texture2D texture = null)
+        private WeakReference<Tile> tileUp = null;
+        private WeakReference<Tile> tileDown = null;
+        private WeakReference<Tile> tileLeft = null;
+        private WeakReference<Tile> tileRight = null;
+
+        public Tile(Vector2 tilePosition, string textureName)
         {
             TilePosition = tilePosition;
-            Texture = texture;
+            Texture = textureName;
             CollisionBox = new Rectangle((int)TilePosition.X * Main.tileSize,
                                          (int)TilePosition.Y * Main.tileSize,
                                          Main.tileSize, Main.tileSize);
+            if(CollisionBox.X < 0)
+            {
+                int a = 0;
+            }
+
+            int x = (int)tilePosition.X;
+            int y = (int)tilePosition.Y;
+            if (tilePosition.X > 0)
+                tileLeft = new WeakReference<Tile>(Main.world.Tiles[x - 1, y]);
+            if (tilePosition.X < Main.totalMapSize - 1)
+                tileRight = new WeakReference<Tile>(Main.world.Tiles[x + 1, y]);
+            if (tilePosition.Y > 0)
+                tileUp = new WeakReference<Tile>(Main.world.Tiles[x, y - 1]);
+            if (tilePosition.Y < Main.totalMapSize - 1)
+                tileDown = new WeakReference<Tile>(Main.world.Tiles[x, y + 1]);
+        }
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
+           spriteBatch.Draw(Main.TextureStore[Texture], CollisionBox, Color.Gray);
         }
     }
 }
