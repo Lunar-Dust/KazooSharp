@@ -8,10 +8,10 @@ namespace KazooQuestCS.GUI
 {
     enum ButtonType
     {
-        basic,   // Calls a function
-        toggle,  // Changes a setting thing
-        submenu, // Opens another menu
-        back     // Goes back from a submenu
+        basic = 0,   // Calls a function
+        toggle = 1,  // Changes a setting thing
+        submenu = 2, // Opens another menu
+        back = 3     // Goes back from a submenu
     }
 
     public class Button

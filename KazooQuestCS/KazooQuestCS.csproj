@@ -42,6 +42,8 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Code\Animation.cs" />
+    <Compile Include="Code\AnimationManager.cs" />
     <Compile Include="Code\Camera.cs" />
     <Compile Include="Code\DelayedAction.cs" />
     <Compile Include="Code\Enemy.cs" />
@@ -49,6 +51,9 @@
     <Compile Include="Code\Stats.cs" />
     <Compile Include="Code\Tile.cs" />
     <Compile Include="GUI\Button.cs" />
+    <Compile Include="GUI\HUD.cs" />
+    <Compile Include="GUI\MainMenu.cs" />
+    <Compile Include="GUI\PauseMenu.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="GUI\Menu.cs" />
     <Compile Include="Code\Player.cs" />

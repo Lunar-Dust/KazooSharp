@@ -20,8 +20,9 @@ namespace KazooQuestCS
         private int def;
         private int res;
         private int spd;
-
         private bool statsSet = false;
+
+        public string name;
 
         public Stats()
         {
@@ -48,6 +49,9 @@ namespace KazooQuestCS
             {
                 switch(node.ChildNodes[x].Name)
                 {
+                    case "name":
+                        name = node.ChildNodes[x].InnerText;
+                        break;
                     case "level":
                         level = int.Parse(node.ChildNodes[x].InnerText);
                         break;

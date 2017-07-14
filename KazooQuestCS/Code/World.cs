@@ -12,6 +12,7 @@ namespace KazooQuestCS
     {
         public Tile[,] Tiles;
         private List<WeakReference<Tile>> nonFloorTiles;
+        const int playerMoveDistance = Main.tileSize / 10;
 
         public bool Active { get; set; }
 
@@ -27,13 +28,17 @@ namespace KazooQuestCS
             {
                 for (int y = 0; y < Main.totalMapSize; ++y)
                 {
-                    switch (Main.random.Next(5))
+                    switch (Main.random.Next(15))
                     {
                         case 1:
                             Tiles[x, y] = new Tile(new Vector2(x, y), "Tiles/Rock1");
                             Tiles[x, y].IsPassable = false;
                             nonFloorTiles.Add(new WeakReference<Tile>(Tiles[x, y]));
                             break;
+                        case 14:
+                            Tiles[x, y] = new Tile(new Vector2(x, y), "Tiles/Grass1");
+                            Tiles[x, y].Enemy = new Enemy();
+                                break;
                         default:
                             Tiles[x, y] = new Tile(new Vector2(x, y), "Tiles/Grass1");
                             break;
@@ -55,7 +60,11 @@ namespace KazooQuestCS
                         Rectangle collision = Rectangle.Intersect(tile.CollisionBox, Main.player.CollisionBox);
                         if (collision.Width == collision.Height)
                         {
-                            Main.player.CollisionBox.Offset(0.1f, 0.1f);
+                            // TODO: Detect player movement direction and offset negative
+                            if(Main.KeyDown(Keys.D) || Main.KeyDown(Keys.W))
+                                Main.player.CollisionBox.Offset(playerMoveDistance, -playerMoveDistance);
+                            if (Main.KeyDown(Keys.A) || Main.KeyDown(Keys.S))
+                                Main.player.CollisionBox.Offset(-playerMoveDistance, playerMoveDistance);
                         }
 
                         if (collision.Width <= collision.Height)

@@ -9,7 +9,7 @@ namespace KazooQuestCS
 {
     public class Menu : IDisposable
     {
-        string Title;
+        public string Title;
         Texture2D Background;
         SpriteFont Font;
         Rectangle Position;
@@ -19,8 +19,9 @@ namespace KazooQuestCS
         private Vector2 _base;
         private Vector2 _pos;
 
-        public List<Button> Items = new List<Button>();
-         
+        public List<Button> Items = new List<Button>()
+        {};
+
         public void Dispose()
         {
             Active = false;
@@ -28,22 +29,11 @@ namespace KazooQuestCS
             if(Background != null) Background.Dispose();
         }
 
-        public void SetFont(SpriteFont font)
+        public Menu()
         {
-            if(Font == null) Font = font;
-        }
-
-        public Menu(string title,
-                    Rectangle position,
-                    Texture2D background = null,
-                    bool active = false)
-        {
-            _base.X = position.Left;
-            _base.Y = position.Top;
-            if (background == null) Background = new Texture2D(Main.graphicsDevice, position.Width, position.Height);
-            else Background = background;
-            Title = title;
-            Active = active;
+            _base.X = Main.windowSize / 5;
+            _base.Y = Main.windowSize / 5;
+            Background = new Texture2D(Main.graphicsDevice, (Main.windowSize / 5) * 4, (Main.windowSize / 5) * 4);
         }
 
         public void Add(string name, Action action, int type = 0, string text = "")

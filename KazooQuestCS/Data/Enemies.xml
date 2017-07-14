@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Enemies>
-  <Enemy name="Slime">
+  <Enemy>
+    <name>Slime</name>
     <level>1</level>
     <hp>100</hp>
     <str>5</str>
@@ -11,7 +12,8 @@
     <area>none</area>
     <info>Boing!</info>
   </Enemy>
-  <Enemy name="Wolf">
+  <Enemy>
+    <name>Wolf</name>
     <level>2</level>
     <hp>100</hp>
     <str>5</str>

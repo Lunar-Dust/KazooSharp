@@ -21,6 +21,8 @@ namespace KazooQuestCS
         {
             foreach (Menu menu in Main.menus)
             {
+                if (menu.Title == "PauseMenu" && Main.KeyPush(Keys.Escape))
+                    Main.Pause();
                 if (!menu.Active) continue;
 
                 if (Main.KeyPush(Keys.W))

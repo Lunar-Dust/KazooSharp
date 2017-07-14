@@ -11,7 +11,13 @@ namespace KazooQuestCS
         private Stats stats;
 
         public Stats Stats { get { return stats;  } }
-        public Texture2D Texture { get; }
+        public Texture2D Texture
+        {
+            get
+            {
+                return Main.TextureStore[Main.Textures["player"]];
+            }
+        }
         public Rectangle CollisionBox;
         public Rectangle OldCollisionBox;
         public Vector2 TilePosition { get; }
@@ -20,9 +26,8 @@ namespace KazooQuestCS
         public int Width { get {return Texture.Width; }}
         public bool Active { get; set; }
 
-        public Player(Texture2D texture)
+        public Player()
         {
-            Texture = texture;
             TilePosition = new Vector2(0, 0);
             CollisionBox = new Rectangle((Main.windowSize - Main.tileSize) / 2,
                                          (Main.windowSize - Main.tileSize) / 2,
@@ -46,7 +51,7 @@ namespace KazooQuestCS
         public void Draw(SpriteBatch spriteBatch)
         {
             if (!Active) return;
-            spriteBatch.Draw(Main.TextureStore["player"], CollisionBox, Color.White);
+            spriteBatch.Draw(Texture, CollisionBox, Color.White);
         }
 
         private void CheckValidTile()

@@ -14,6 +14,7 @@ namespace KazooQuestCS
 
         public Rectangle CollisionBox;
         public Vector2 TilePosition;
+        public Enemy Enemy;
         private string Texture;
 
         private WeakReference<Tile> tileUp = null;
@@ -28,10 +29,6 @@ namespace KazooQuestCS
             CollisionBox = new Rectangle((int)TilePosition.X * Main.tileSize,
                                          (int)TilePosition.Y * Main.tileSize,
                                          Main.tileSize, Main.tileSize);
-            if(CollisionBox.X < 0)
-            {
-                int a = 0;
-            }
 
             int x = (int)tilePosition.X;
             int y = (int)tilePosition.Y;
@@ -47,7 +44,11 @@ namespace KazooQuestCS
 
         public void Draw(SpriteBatch spriteBatch)
         {
-           spriteBatch.Draw(Main.TextureStore[Texture], CollisionBox, Color.Gray);
+            spriteBatch.Draw(Main.TextureStore[Texture], CollisionBox, Color.Gray);
+            if(Enemy != null)
+            {
+                Enemy.Draw(spriteBatch);
+            }
         }
     }
 }

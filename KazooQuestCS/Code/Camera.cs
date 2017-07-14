@@ -17,6 +17,8 @@ namespace KazooQuestCS
                 return Main.player.CollisionBox.Center;
             }
         }
+        public float Rotation { get; set; }
+        public float Zoom { get; set; }
 
         private Rectangle Bounds { get; set; }
 
